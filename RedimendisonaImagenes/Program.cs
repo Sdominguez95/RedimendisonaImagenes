@@ -1,36 +1,38 @@
 using System;
 using ImageMagick;
+using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RedimendisonaImagenes
 {
-    class program 
+    class program
     {
+
         static void Main(string[] args)
         {
-            string RutaS = @"D:\Proyectos\RedimendisonaImagenes\RedimendisonaImagenes\test\lago.png";
-            string RutaG = @"D:\Proyectos\RedimendisonaImagenes\RedimendisonaImagenes\test\lago.jpg";
-            using(MagickImage oMagickImage = new MagickImage(RutaS))
+            string basePATH = @"D:\Proyectos\RedimendisonaImagenes\RedimendisonaImagenes\test\";
+            string[] files = Directory.GetFiles(basePATH);
+            
+
+
+            foreach (string file in files)
             {
-                oMagickImage.Resize(1600, 0);
-                oMagickImage.Write(RutaG);
+
+
+                Console.WriteLine(file);
+                using(MagickImage oMagickImage = new MagickImage(file))
+                {
+                    int ancho = oMagickImage.Width;
+                    oMagickImage.Resize(ancho, 0);
+                    oMagickImage.Write(file.Replace(".png", ".jpg"));
+
+                }
+                if (file.Contains(".png"))
+                {
+                    File.Delete(file);
+                }
             }
         }
+
     }
 }
-
-
-string basePATH = $"D:\\PublicacionesAWS\\Produccion\\Andes\\imgs\\imgsPreview\\{request.IDPublicacion}";
-string[] folders = Directory.GetDirectories(basePATH);
-string path = "";
-foreach (string folder in folders)
-{
-    path = folder;
-    string[] files = Directory.GetFiles(path); // Obtener archivos
-    foreach (string file in files)
-    {
-        string sourceFile = file;
-        string destinationFile = $"D:\\PublicacionesAWS\\Produccion\\Andes\\imgs\\{(folder).Replace(basePATH + '\\', "")}\\{file.Replace(folder + '\\', "")}";
-        if (!System.IO.File.Exists(destinationFile))
-        {
-            System.IO.File.Copy(sourceFile, destinationFile);
-        }
