@@ -1,38 +1,33 @@
 using System;
 using ImageMagick;
 using System.Drawing;
-using System.Security.Cryptography.X509Certificates;
+//using System.Security.Cryptography.X509Certificates;
 
 namespace RedimendisonaImagenes
 {
     class program
     {
-
         static void Main(string[] args)
         {
-            string basePATH = @"D:\Proyectos\RedimendisonaImagenes\RedimendisonaImagenes\test\";
-            string[] files = Directory.GetFiles(basePATH);
+            string ruta = @"D:\Proyectos\RedimendisonaImagenes\RedimendisonaImagenes\test\";
+            string[] archivos = Directory.GetFiles(ruta);
             
 
-
-            foreach (string file in files)
+            foreach (string archivo in archivos)
             {
-
-
-                Console.WriteLine(file);
-                using(MagickImage oMagickImage = new MagickImage(file))
+                using(MagickImage oMagickImage = new MagickImage(archivo))
                 {
-                    int ancho = oMagickImage.Width;
-                    oMagickImage.Resize(ancho, 0);
-                    oMagickImage.Write(file.Replace(".png", ".jpg"));
-
-                }
-                if (file.Contains(".png"))
-                {
-                    File.Delete(file);
-                }
+                    oMagickImage.Resize(oMagickImage.Width, 0);
+                    var img = new FileInfo(archivo);
+                    Console.WriteLine("Imagen"+ img);
+                    Console.WriteLine("Bytes antes: " + img.Length);
+                    var ImgOpt = new ImageOptimizer();
+                    ImgOpt.Compress(img);
+                    ImgOpt.LosslessCompress(img);
+                    img.Refresh();
+                    Console.WriteLine("Bytes después:  " + img.Length);
+                }                                
             }
         }
-
     }
 }
